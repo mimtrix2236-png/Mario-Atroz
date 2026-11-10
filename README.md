@@ -49,3 +49,6 @@ The level design uses general side-scrolling platform principles: introduce safe
 ## Project status
 
 Initial playable prototype. Art is drawn in code so the project opens without downloading third-party assets. Audio, extra stages, menus and device testing can be expanded in later iterations.
+
+
+Android CI build workflow: `.github/workflows/android-apk.yml`.
