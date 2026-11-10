@@ -48,6 +48,9 @@ jobs:
           unzip -q templates.tpz -d templates
           cp -r templates/templates/* "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.stable/"
 
+      - name: Install Godot Android build template
+        run: godot --headless --editor --path . --install-android-build-template --quit
+
       - name: Configure Godot Android export
         shell: bash
         run: |
