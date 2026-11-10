@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Mauro Atros Android APK
 
 on:
   push:
@@ -74,12 +74,12 @@ jobs:
       - name: Export debug APK
         run: |
           mkdir -p build
-          godot --headless --verbose --path . --export-debug Android build/MarioAtroz-debug.apk
+          godot --headless --verbose --path . --export-debug Android build/Mauro-Atros-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: MarioAtroz-Android-APK
-          path: build/MarioAtroz-debug.apk
+          name: Mauro-Atros-Android-APK
+          path: build/Mauro-Atros-debug.apk
           if-no-files-found: error
           retention-days: 14
