@@ -33,7 +33,7 @@ jobs:
             exit 1
           fi
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" --install "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest" "cmake;3.10.2.4988404" "ndk;23.2.8568313"
+          "$SDKMANAGER" --install "platform-tools" "platforms;android-34" "build-tools;34.0.0" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest" "cmake;3.10.2.4988404" "ndk;23.2.8568313"
 
       - name: Install Godot 4.4.1 and export templates
         shell: bash
@@ -71,7 +71,7 @@ jobs:
       - name: Export debug APK
         run: |
           mkdir -p build
-          godot --headless --path . --export-debug Android build/MarioAtroz-debug.apk
+          godot --headless --verbose --path . --export-debug Android build/MarioAtroz-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
