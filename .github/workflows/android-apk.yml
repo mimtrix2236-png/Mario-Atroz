@@ -1,0 +1,57 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android platform and build tools
+        run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Install Godot 4.4.1 and export templates
+        shell: bash
+        run: |
+          GODOT_VERSION="4.4.1"
+          mkdir -p "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.stable"
+          curl -L "https://github.com/godotengine/godot/releases/download/$GODOT_VERSION-stable/Godot_v$GODOT_VERSION-stable_linux.x86_64.zip" -o godot.zip
+          unzip -q godot.zip -d godot-bin
+          sudo install godot-bin/Godot_v$GODOT_VERSION-stable_linux.x86_64 /usr/local/bin/godot
+          curl -L "https://github.com/godotengine/godot/releases/download/$GODOT_VERSION-stable/Godot_v$GODOT_VERSION-stable_export_templates.tpz" -o templates.tpz
+          mkdir templates
+          unzip -q templates.tpz -d templates
+          cp -r templates/templates/* "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.stable/"
+
+      - name: Validate project and scripts
+        run: godot --headless --editor --path . --quit
+
+      - name: Export debug APK
+        run: |
+          mkdir -p build
+          godot --headless --path . --export-debug Android build/MarioAtroz-debug.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MarioAtroz-Android-APK
+          path: build/MarioAtroz-debug.apk
+          if-no-files-found: error
+          retention-days: 14
